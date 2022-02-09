@@ -1,13 +1,41 @@
 const express = require("express");
 const path = require("path");
-const { sequelize } = require('./models');
+const { sequelize, Oglas_autos, Oglas_motors } = require('./models');
 const jwt = require('jsonwebtoken');
 let alert = require('alert'); 
 require('dotenv').config();
 
+const app = express();
+
+const cors = require('cors');
+
+
+const http = require('http');
+const { Server } = require("socket.io");
+
+
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:8080',
+        methods: ['GET', 'POST'],
+        credentials: true
+    },
+    allowEIO3: true
+});
+
+var corsOptions = {
+    origin: 'http://localhost:8080',
+    optionsSuccessStatus: 200
+}
+
+
+app.use(cors(corsOptions));
+app.use(express.json());
+
 var userType;
 
-const app = express();
+
 
 function getCookies(req) {
     if (req.headers.cookie == null) return {};
@@ -133,7 +161,35 @@ app.get('/admin/users.html',[ authToken, validacija ], (req,res) => {
 
 app.use(express.static(path.join(__dirname, 'static')));
 
-app.listen({ port: 8000 }, async () => {
+
+
+io.on('connection', socket => {
+    //ocket.use(authSocket);
+
+    socket.on('oglas_auto', msg => {
+        //console.log(msg);
+        Oglas_autos.create(msg)
+            .then( rows => {
+                Oglas_autos.findOne({ where: { id: rows.id }, include: ['user','auto'] })
+                    .then( msg => io.emit('oglas_auto', JSON.stringify(msg)) )
+            }).catch( err => res.status(500).json(err) );
+    });
+
+    socket.on('oglas_motor', msg => {
+        //console.log(msg);
+        Oglas_motors.create(msg)
+            .then( rows => {
+                Oglas_motors.findOne({ where: { id: rows.id }, include: ['user','motor'] })
+                    .then( msg => io.emit('oglas_motor', JSON.stringify(msg)) )
+            }).catch( err => res.status(500).json(err) );
+    });
+
+    socket.on('error', err => socket.emit('error', err.message) );
+});
+
+
+
+server.listen({ port: 8000 }, async () => {
     await sequelize.authenticate();
     console.log("app started");
 });

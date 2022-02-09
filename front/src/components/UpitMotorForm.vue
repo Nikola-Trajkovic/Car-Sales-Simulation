@@ -114,7 +114,10 @@ import { mapActions, mapState } from 'vuex';
                 }
 
                 if(validirano){
-                    this.fetchUnosMotor(this.form);
+                    //this.fetchUnosMotor(this.form);
+                    //console.log(this.form);
+                    this.$socket.emit('oglas_motor', this.form);
+                    window.location.reload()
                 }else{
                     var message
                     err.forEach(el => {

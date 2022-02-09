@@ -60,6 +60,16 @@ export default new Vuex.Store({
   },
   actions: {
 
+    socket_oglas_auto({ commit }, msg) {
+      const rec = JSON.parse(msg);
+      commit('addUpitAuto', rec);
+    },
+
+    socket_oglas_motor({ commit }, msg) {
+      const rec = JSON.parse(msg);
+      commit('addUpitMotor', rec);
+    },
+
     updateAuto({commit}, id){
       fetch(`http://localhost:10000/api/oglas_auto/${id}`, {
           method: 'GET',

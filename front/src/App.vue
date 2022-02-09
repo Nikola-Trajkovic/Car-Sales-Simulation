@@ -61,6 +61,13 @@
         this.removeUserId();
         window.location.href = '/'
       }
+    },
+
+    sockets: {
+      error(err) {
+        console.log(err);
+        alert("AAAAAAAAAAAAAAA");
+      }
     }
 
   }

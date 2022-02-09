@@ -1,15 +1,17 @@
 <template>
     <div class="main">
        <b-card
-            v-for="item in upitAutoPrikaz"
+            v-for="item in upitAuto.slice().reverse()"
             :key="item.id"
-            :title="item.auto.marka + item.auto.model" 
+            :title="item.auto.marka+ razmak + item.auto.model" 
             img-src=""
             img-alt="Image"
             img-top
             tag="article"
             class="mb-2" 
         >
+
+        <b-img v-bind:src="slike[item.auto.marka]" fluid alt="Fluid image" ></b-img>
         
         <b-card-text>
            <p>Opis: {{item.opis}}</p>
@@ -34,6 +36,8 @@
     data() {
         return {
             upitAutoPrikaz: [],
+            slike : {},
+            razmak : " "
         }
     },
 
@@ -47,6 +51,13 @@
     mounted() {
     
         this.fetchUpitAuto()
+        const slik = {
+            Bmw: 'https://www.bmw.rs/content/dam/bmw/common/all-models/x-series/x5/2021/highlights/bmw-x5-onepager-mc-new-edition-hero-desktop.jpg',
+            Audi: 'https://www.nacionalnaklasa.com/wp-content/uploads/2021/10/2021mansory_rs7.jpg',
+            Skoda: 'https://www.magazinauto.com/wp-content/uploads/2019/05/auto-magazin-srbija-2020-skoda-superb-teaser.jpg'
+
+        }
+        this.slike = slik
       
     },
 

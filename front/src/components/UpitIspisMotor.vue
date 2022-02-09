@@ -1,7 +1,7 @@
 <template>
     <div class="main">
        <b-card
-            v-for="item in upitMotorPrikazi"
+            v-for="item in upitMotorPrikazi.slice().reverse()"
             :key="item.id"
             :title="item.motor.marka + razmak + item.motor.model" 
             img-src=""
@@ -10,6 +10,8 @@
             tag="article"
             class="mb-2" 
         >
+
+        <b-img v-bind:src="slike[item.motor.marka]" fluid alt="Fluid image" ></b-img>
         
         <b-card-text>
            <p>Opis: {{item.opis}}</p>
@@ -34,7 +36,8 @@
     data() {
         return {
             upitMotorPrikazi: [],
-            razmak: " "
+            razmak: " ",
+            slike: {}
         }
     },
 
@@ -49,6 +52,13 @@
     mounted() {
     
         this.fetchUpitMotor();
+        const slik = {
+
+            Bmw: 'https://www.luxlife.rs/storage/posts/gallery/2013/Oct/170977/novi-bmw-r-1200-gs-adventure.jpg',
+            Suzuki: 'https://www.luxlife.rs/storage/posts/gallery/2011/Oct/177121/suzuki-gsx-r-600.jpg'
+           
+        }
+        this.slike = slik
       
     },
 

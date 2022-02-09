@@ -1,7 +1,7 @@
 <template>
     <div class="main">
        <b-card
-            v-for="item in upitAutoPrikaz"
+            v-for="item in upitAutoPrikaz.slice().reverse()"
             :key="item.id"
             :title="item.auto.marka + item.auto.model" 
             img-src=""

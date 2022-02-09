@@ -24,7 +24,7 @@
         <b-form-select
         id="inline-form-custom-select-pref"
         class="mb-2 mr-sm-2 mb-sm-0"
-        v-model="form.autoID"
+        v-model="form.autoId"
         :options="options"
         ></b-form-select>
 
@@ -49,7 +49,7 @@
                 contact: '',
                 cena: '',
                 userId: localStorage.userId,
-                autoID: null
+                autoId: null
             },
             options:[]
             
@@ -102,13 +102,16 @@
                     err.push("Morate uneti ocenu izmedju 1 i 10; ")
                     validirano = false
                 }
-                if(this.form.autoID == null){
+                if(this.form.autoId == null){
                     err.push("Morate izabrati auto; ")
                     validirano = false
                 }
 
                 if(validirano){
-                    this.fetchUnosAuto(this.form);
+                    //this.fetchUnosAuto(this.form);
+                    //console.log(this.form);
+                    this.$socket.emit('oglas_auto', this.form);
+                    window.location.reload()
                 }else{
                     var message
                     err.forEach(el => {
